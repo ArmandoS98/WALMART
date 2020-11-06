@@ -28,7 +28,7 @@ signupForm.addEventListener("submit", (e) => {
       photoUrl = "img Default";
       uid = user.uid;
 
-      await saveTask(name, email, photoUrl, uid, 1);
+      await saveTaskByGoogle(name, email, photoUrl, uid, 0);
       signupForm.reset();
       $("#signupModal").modal("hide");
     });
@@ -60,12 +60,12 @@ logout.addEventListener("click", (e) => {
 });
 
 function dataUser(user) {
-  document.querySelector(".user-name").innerHTML = user ?
-    user.displayName :
-    "Anonimus";
-  document.querySelector(".user-email").innerHTML = user ?
-    user.email :
-    "e-mail";
+  document.querySelector(".user-name").innerHTML = user
+    ? user.displayName
+    : "Anonimus";
+  document.querySelector(".user-email").innerHTML = user
+    ? user.email
+    : "e-mail";
   let img = document.getElementById("user-image").src;
 
   document.getElementById("isline").innerHTML = user ? "online" : "offline";
@@ -73,6 +73,7 @@ function dataUser(user) {
 }
 
 //GoogleLgin
+//LEVGIr8fOMfJpu0Hm3PjA6k3Thq1
 const googleButton = document.querySelector("#googleLogin");
 googleButton.addEventListener("click", (e) => {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -88,7 +89,7 @@ googleButton.addEventListener("click", (e) => {
       photoUrl = user.photoURL;
       uid = user.uid;
       dataUser(user);
-      await saveTask(name, email, photoUrl, uid, 1);
+      await saveTaskByGoogle(name, email, photoUrl, uid, 1);
 
       signupForm.reset();
       $("#signinModal").modal("hide");
@@ -127,7 +128,6 @@ const setupProductos = (data) => {
   }
 };
 
-
 // Eventos
 // validacion del logeo del usuario
 auth.onAuthStateChanged((user) => {
@@ -146,7 +146,7 @@ auth.onAuthStateChanged((user) => {
     });
 });
 
-//Firestore
+//Firestore - REGISTRO ANONIMO
 //Guardar informacion
 const user_coleccion = "Usuarios";
 const saveTask = (name, email, photoUrl, uid, rol) => {
@@ -161,52 +161,74 @@ const saveTask = (name, email, photoUrl, uid, rol) => {
   });
 };
 
+//Firestore - REGISTRO CON GOOGLE
+//Guardar informacion
+const saveTaskByGoogle = (name, email, photoUrl, uid, rol) => {
+  const docID = fs.collection(user_coleccion).doc(uid);
+  docID
+    .get()
+    .then(function (doc) {
+      if (doc.exists) {
+        console.log("Usuario ya ingresado:", doc.data());
+      } else {
+        fs.collection(user_coleccion).doc(uid).set({
+          email,
+          uid,
+          name,
+          rol,
+          photoUrl,
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+};
 
 /***
  * AÑADIR PRODUCTOS AL CARRITO POR MEDIO DE LOCAL STORAGE
  */
 
- /**
-  * funciones
-  */
- 
-var products = []; //Objects data will be stored here. 
+/**
+ * funciones
+ */
+
+var products = []; //Objects data will be stored here.
 
 // inserta los productos
 
+function addToCart(productsData) {
+  const objCartStored = localStorage.getItem("my_products");
+  const objCart = objCartStored ? JSON.parse(objCartStored) : {};
+  let existProduct = false;
+  productsData.cantidad = 1;
 
- function addToCart(productsData) {
-   const objCartStored = localStorage.getItem("my_products");
-   const objCart = objCartStored ? JSON.parse(objCartStored) : {};
-   let existProduct = false;
-   productsData.cantidad = 1;
+  if (objCart.length > 0) {
+    existProduct = objCart.findIndex(
+      (product) => product.docid === productsData.docid
+    );
+    if (existProduct !== -1) {
+      alert("El producto ya esta añadido al carrito!!");
+    } else {
+      products.push(productsData);
+    }
+  } else {
+    products.push(productsData);
+  }
 
-   if (objCart.length > 0) {
-     existProduct = objCart.findIndex(
-       (product) => product.docid === productsData.docid
-     );
-     if (existProduct !== -1) {
-       alert("El producto ya esta añadido al carrito!!")
-     } else {
-       products.push(productsData);
-     }
-   } else {
-     products.push(productsData);
-   }
+  localStorage.setItem("my_products", JSON.stringify(products));
 
-   localStorage.setItem("my_products", JSON.stringify(products));
+  // agrega al icono del carrito la cantidad de productos comprados
+  products.length > 0
+    ? $(".notification").html(products.length)
+    : $(".notification").html(0);
+}
 
-   // agrega al icono del carrito la cantidad de productos comprados
-   products.length > 0
-     ? $(".notification").html(products.length)
-     : $(".notification").html(0);
- }
+/***
+ * acciones
+ */
 
-  /***
-   * acciones
-   */
- 
-$('.productos').on('click','.add-card',function(){
-  let data=$(this).data()
-  addToCart(data)
-})
+$(".productos").on("click", ".add-card", function () {
+  let data = $(this).data();
+  addToCart(data);
+});
