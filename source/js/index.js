@@ -147,7 +147,6 @@ auth.onAuthStateChanged((user) => {
     //Cargar los localStorage del carrito y imprimir la longitud del array almacenado
 
     
-
 });
 
 //Firestore - REGISTRO ANONIMO
