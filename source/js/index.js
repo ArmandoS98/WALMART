@@ -144,9 +144,12 @@ auth.onAuthStateChanged((user) => {
       loginCheck(user);
     });
 
-    //Cargar los localStorage del carrito y imprimir la longitud del array almacenado
+  //Cargar los localStorage del carrito y imprimir la longitud del array almacenado
 
-    
+  var objCartStored = localStorage.getItem("my_products");
+  var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
+
+  $(".notification").html(storedProducts.length);
 });
 
 //Firestore - REGISTRO ANONIMO
@@ -212,19 +215,25 @@ function addToCart(productsData) {
     );
     if (existProduct !== -1) {
       alert("El producto ya esta añadido al carrito!!");
+      console.log();
     } else {
       products.push(productsData);
+      localStorage.setItem("my_products", JSON.stringify(products));
+
+      // agrega al icono del carrito la cantidad de productos comprados
+      products.length > 0
+        ? $(".notification").html(products.length)
+        : $(".notification").html(0);
     }
   } else {
     products.push(productsData);
+    localStorage.setItem("my_products", JSON.stringify(products));
+
+    // agrega al icono del carrito la cantidad de productos comprados
+    products.length > 0
+      ? $(".notification").html(products.length)
+      : $(".notification").html(0);
   }
-
-  localStorage.setItem("my_products", JSON.stringify(products));
-
-  // agrega al icono del carrito la cantidad de productos comprados
-  products.length > 0
-    ? $(".notification").html(products.length)
-    : $(".notification").html(0);
 }
 
 /***
