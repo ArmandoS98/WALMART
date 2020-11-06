@@ -73,7 +73,6 @@ function dataUser(user) {
 }
 
 //GoogleLgin
-//LEVGIr8fOMfJpu0Hm3PjA6k3Thq1
 const googleButton = document.querySelector("#googleLogin");
 googleButton.addEventListener("click", (e) => {
   const provider = new firebase.auth.GoogleAuthProvider();
@@ -144,6 +143,11 @@ auth.onAuthStateChanged((user) => {
       setupProductos(snapshot.docs);
       loginCheck(user);
     });
+
+    //Cargar los localStorage del carrito y imprimir la longitud del array almacenado
+
+    
+
 });
 
 //Firestore - REGISTRO ANONIMO
