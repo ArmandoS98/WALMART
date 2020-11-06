@@ -1,3 +1,4 @@
+//Holis
 const loggedOutLinks = document.querySelectorAll(".logged-out");
 const loggedInLinks = document.querySelectorAll(".logged-in");
 const loginCheck = (user) => {
