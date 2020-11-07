@@ -2,6 +2,19 @@
  *
  */
 
+const objGoogleUser = localStorage.getItem("objGoogleUser");
+const storedGoogleUser = objGoogleUser ? JSON.parse(objGoogleUser) : {};
+
+const objCartStored = localStorage.getItem("my_products");
+const storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
+
+console.table(storedGoogleUser.email);
+
+$("#email").val(storedGoogleUser.email);
+if (storedGoogleUser.length > 0) {
+  console.table(storedGoogleUser);
+}
+
 var totalProductos = 0;
 
 function template(product) {
@@ -23,8 +36,6 @@ function template(product) {
 }
 
 function myCart() {
-  var objCartStored = localStorage.getItem("my_products");
-  var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
   $("#list-products-final").html("");
   if (storedProducts.length > 0) {
     storedProducts.forEach((element) => {
@@ -34,8 +45,6 @@ function myCart() {
 }
 
 function addProduct(id, number) {
-  var objCartStored = localStorage.getItem("my_products");
-  var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
   existProduct = storedProducts.findIndex((product) => product.docid === id);
   if (existProduct !== -1) {
     storedProducts[existProduct].cantidad = number;
@@ -45,8 +54,6 @@ function addProduct(id, number) {
 
 function calculateTotal() {
   var totalPago = 0;
-  var objCartStored = localStorage.getItem("my_products");
-  var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
   if (storedProducts.length > 0) {
     storedProducts.forEach((element) => {
       totalPago += Number(element.precio * element.cantidad);
@@ -57,6 +64,7 @@ function calculateTotal() {
     <tr>`;
     $("#list-products-final").append(templateTotal);
     $(".total-pay").html(totalPago);
+    $(".total-pay").val(totalPago);
     $("#total-product").html(storedProducts.length);
   }
 }
@@ -86,6 +94,14 @@ function FormSerialicearray(form) {
 $("#Billing-data-form").on("submit", function (e) {
   e.preventDefault(); // evitamos que el evento se propague
   e.stopPropagation(); // detenmos que el form se envie y recargue la pagina
+
+  let descripcionCompra = []
+    if (storedProducts.length > 0) {
+      storedProducts.forEach((element) => {
+        descripcionCompra.push(element.name);
+      });
+    }
+    console.log(descripcionCompra);
   let form = $(this),
     required_fields_filled = true;
 
@@ -141,3 +157,28 @@ const CustomAlert = (elementHtml, mensaje, alertType) => {
 
 myCart();
 calculateTotal();
+
+
+
+
+const saveTaskByGoogle = (name, email, photoUrl, uid, rol) => {
+  const docID = fs.collection(user_coleccion).doc(uid);
+  docID
+    .get()
+    .then(function (doc) {
+      if (doc.exists) {
+        console.log("Usuario ya ingresado:", doc.data());
+      } else {
+        fs.collection(user_coleccion).doc(uid).set({
+          email,
+          uid,
+          name,
+          rol,
+          photoUrl,
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+};
