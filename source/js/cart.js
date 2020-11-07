@@ -26,9 +26,11 @@ function myCart() {
   var objCartStored = localStorage.getItem("my_products");
   var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
   $("#list-products-final").html("");
-  storedProducts.forEach((element) => {
-    $("#list-products-final").append(template(element));
-  });
+  if (storedProducts.length > 0) {
+    storedProducts.forEach((element) => {
+      $("#list-products-final").append(template(element));
+    });
+  }
 }
 
 function addProduct(id, number) {
@@ -45,16 +47,18 @@ function calculateTotal() {
   var totalPago = 0;
   var objCartStored = localStorage.getItem("my_products");
   var storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
-  storedProducts.forEach((element) => {
-    totalPago += Number(element.precio * element.cantidad);
-  });
-  templateTotal = `<tr>
-    <th colspan="4" scope="col" class="text-right">TOTAL :</th>
-    <th scope="col" class="text-center">$.${totalPago}</th>
-  <tr>`;
-  $("#list-products-final").append(templateTotal);
-  $(".total-pay").html(totalPago);
-  $("#total-product").html(storedProducts.length);
+  if (storedProducts.length > 0) {
+    storedProducts.forEach((element) => {
+      totalPago += Number(element.precio * element.cantidad);
+    });
+    templateTotal = `<tr>
+      <th colspan="4" scope="col" class="text-right">TOTAL :</th>
+      <th scope="col" class="text-center">$.${totalPago}</th>
+    <tr>`;
+    $("#list-products-final").append(templateTotal);
+    $(".total-pay").html(totalPago);
+    $("#total-product").html(storedProducts.length);
+  }
 }
 
 $("#Shopping-Cart").on("change", ".cantidad", function () {
@@ -63,6 +67,27 @@ $("#Shopping-Cart").on("change", ".cantidad", function () {
   addProduct(id, cantidad);
   myCart();
   calculateTotal();
+});
+
+/***
+ * Funcion para Formulario devuelve un array de los datos insertados en el
+ * @form typo de dato jquery selector
+ * @returns
+ */
+
+function FormSerialicearray(form) {
+  return form.serializeArray();
+}
+
+/*metodo que escucha el evento submit del formulario al enviarse detiene el evento por defecto y manejamos los datos 
+  con la funcion FormSerialicearray
+*/
+
+$("#Billing-data-form").on("submit", function (e) {
+  e.preventDefault(); // evitamos que el evento se propague 
+  e.stopPropagation();// detenmos que el form se envie y recargue la pagina
+
+  console.log(FormSerialicearray($(this))); // devolvemos en un array los datos insertados en el formulario
 });
 
 myCart();
