@@ -107,6 +107,10 @@ $('a[data-toggle="pill"]').on("shown.bs.tab", function (e) {
           $("#complete-order").find("tbody").append(html(producto)); // AGREGAMOS LOS PEDIDOS
         });
       });
+  } else if (tabNavigationId == "#Shopping-Cart") {
+    location.reload();
+    /*myCart();
+    calculateTotal();*/
   }
 });
 
@@ -135,7 +139,6 @@ function FormSerialicearray(form) {
 $("#Billing-data-form").on("submit", function (e) {
   e.preventDefault(); // evitamos que el evento se propague
   e.stopPropagation(); // detenmos que el form se envie y recargue la pagina
-
 
   let form = $(this),
     required_fields_filled = true;
@@ -236,7 +239,7 @@ const savePurchaseInfo = (form) => {
 
   //Datos Pedido
   let nombrePedido = infor[0][0].value + " " + infor[0][1].value;
-  let correoPedido = infor[0][2].value;
+  let correoPedido = storedGoogleUser.email;
   let direccionPedido =
     infor[0][3].value +
     ", " +
@@ -272,4 +275,6 @@ const savePurchaseInfo = (form) => {
     fechaExpiracionTarjetaPedido,
     ccbTarjetaPedido,
   });
+
+  // location.reload();
 };
