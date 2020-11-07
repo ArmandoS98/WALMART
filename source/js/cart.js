@@ -163,10 +163,7 @@ const Pedidos = "Pedidos";
 const savePurchaseInfo = (form) => {
   //Obtenemos la informacion del pedido
   let infor = [FormSerialicearray(form)];
-  console.log(infor);
-
-
-/**
+  /**
 0: {name: "firstName", value: "Armando"}
 1: {name: "lastName", value: "Santos"}
 2: {name: "email", value: "armandosantosec@gmail.com"}
@@ -183,13 +180,45 @@ const savePurchaseInfo = (form) => {
 13: {name: "total", value: "510"}
  */
 
-
   //Obtenemos el ID del docuemntos a donde se va a guardar
-  //const docID = fs.collection(Pedidos).doc().id;
-  //infor.docID = docID;
+  const docID = fs.collection(Pedidos).doc().id;
 
-  //console.log(infor);
+  //Datos Pedido
+  let nombrePedido = infor[0][0].value + " " + infor[0][1].value;
+  let correoPedido = infor[0][2].value;
+  let direccionPedido =
+    infor[0][3].value +
+    ", " +
+    infor[0][4].value +
+    ", " +
+    infor[0][5].value +
+    ", " +
+    infor[0][6].value;
+  let zipPedido = infor[0][7].value;
+  let metodoPagoPedido = infor[0][8].value;
+
+  //Datos tarjeta
+  let propietarioTarjetaPedido = infor[0][9].value;
+  let numeroTarejtaPedido = infor[0][10].value;
+  let fechaExpiracionTarjetaPedido = infor[0][11].value;
+  let ccbTarjetaPedido = infor[0][12].value;
+  let totalPedido = infor[0][13].value;
+  let descipcionPedido = "Holis";
+  let idPedido = docID;
 
   //Hacemos el llamada a la DB en la posicion del DOC que creamos anteriormente
-  //fs.collection(Pedidos).doc(docID).set(infor);
+  fs.collection(Pedidos).doc(docID).set({
+    idPedido,
+    descipcionPedido,
+    totalPedido,
+    metodoPagoPedido,
+    zipPedido,
+    direccionPedido,
+    correoPedido,
+    nombrePedido,
+    propietarioTarjetaPedido,
+    numeroTarejtaPedido,
+    fechaExpiracionTarjetaPedido,
+    ccbTarjetaPedido,
+  });
 };
