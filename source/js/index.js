@@ -220,7 +220,11 @@ function addToCart(productsData) {
       (product) => product.docid === productsData.docid
     );
     if (existProduct !== -1) {
-      CustomAlert($('.toast'),"El producto ya esta añadido, puedes agregar mas en tu carrito!","danger")
+      CustomAlert(
+        $(".toast"),
+        "El producto ya esta añadido, puedes agregar mas en tu carrito!",
+        "danger"
+      );
     } else {
       products.push(productsData);
       localStorage.setItem("my_products", JSON.stringify(products));
@@ -250,8 +254,6 @@ $(".productos").on("click", ".add-card", function () {
   addToCart(data);
 });
 
-
-
 /**
  * alert custom
  * @param {type jquery elelement} elementHtml
@@ -275,3 +277,4 @@ const CustomAlert = (elementHtml, mensaje, alertType) => {
     .addClass(`${alertType == "success" ? type.class[0] : type.class[1]}`);
   $(elementHtml).find(".toast-body").html(mensaje);
 };
+
