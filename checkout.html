@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="shortcut icon" href="source/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="source/css/menu.css" />
     <link rel="stylesheet" href="source/css/custom.css" />
@@ -131,20 +129,20 @@
                         </div>
                         <div class="col-md-8 order-md-1">
                             <h4 class="mb-3">Billing data</h4>
-                            <form class="needs-validation" id="Billing-data-form">
+                            <form class="needs-validation" id="Billing-data-form" autocomplete="off" novalidate>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="firstName">First name</label>
-                                        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="" value=""
-                                            required>
+                                        <input type="text" class="form-control" id="firstName" name="firstName"
+                                            placeholder="" value="" required>
                                         <div class="invalid-feedback">
                                             Valid first name is required.
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="lastName">Last name</label>
-                                        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="" value=""
-                                            required>
+                                        <input type="text" class="form-control" id="lastName" name="lastName"
+                                            placeholder="" value="" required>
                                         <div class="invalid-feedback">
                                             Valid last name is required.
                                         </div>
@@ -153,7 +151,8 @@
 
                                 <div class="mb-3">
                                     <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com">
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="you@example.com">
                                     <div class="invalid-feedback">
                                         Please enter a valid email address for shipping updates.
                                     </div>
@@ -161,8 +160,8 @@
 
                                 <div class="mb-3">
                                     <label for="address">Address</label>
-                                    <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St"
-                                        required>
+                                    <input type="text" class="form-control" id="address" name="address"
+                                        placeholder="1234 Main St" required>
                                     <div class="invalid-feedback">
                                         Please enter your shipping address.
                                     </div>
@@ -177,7 +176,8 @@
                                 <div class="row">
                                     <div class="col-md-5 mb-3">
                                         <label for="country">Country</label>
-                                        <select class="custom-select d-block w-100" id="country" name="country" required>
+                                        <select class="custom-select d-block w-100" id="country" name="country"
+                                            required>
                                             <option value="">Choose...</option>
                                             <option>Guatemala</option>
                                             <option>United States</option>
@@ -199,7 +199,8 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label for="zip">Zip</label>
-                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="" required>
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder=""
+                                            required>
                                         <div class="invalid-feedback">
                                             Zip code required.
                                         </div>
@@ -212,7 +213,7 @@
                                 <div class="d-block my-3">
                                     <div class="custom-control custom-radio">
                                         <input id="credit" name="paymentMethod" type="radio"
-                                            class="custom-control-input" checked required>
+                                            class="custom-control-input" required>
                                         <label class="custom-control-label" for="credit">Credit card</label>
                                     </div>
                                     <div class="custom-control custom-radio">
@@ -353,12 +354,20 @@
                                     <div class="form-container">
                                         <div class="field-container">
                                             <label for="name">Name</label>
-                                            <input id="name" name="name-card" maxlength="20" type="text">
+                                            <input id="name" name="name-card" maxlength="20" type="text" required>
+                                            <div class="invalid-feedback">
+                                                Valid card name is required.
+                                            </div>
                                         </div>
-                                        <div class="field-container">
+                                        <div class="field-container mt-2">
                                             <label for="cardnumber">Card Number</label><span id="generatecard">generate
                                                 random</span>
-                                            <input id="cardnumber" name="cardnumber" type="text" pattern="[0-9]" inputmode="numeric">
+                                            <input class="form-control" id="cardnumber" name="cardnumber" type="text"
+                                                inputmode="numeric" required>
+                                            <div class="invalid-feedback">
+                                                Valid card number is required.
+                                            </div>
+
                                             <svg id="ccicon" class="ccicon" width="750" height="471"
                                                 viewBox="0 0 750 471" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -367,11 +376,19 @@
                                         </div>
                                         <div class="field-container">
                                             <label for="expirationdate">Expiration (mm/yy)</label>
-                                            <input id="expirationdate" name="expirationdate" type="text" pattern="[0-9]" inputmode="numeric">
+                                            <input id="expirationdate" name="expirationdate" type="text"
+                                                inputmode="numeric" required>
+                                            <div class="invalid-feedback">
+                                                Valid card number expiration date is required.
+                                            </div>
                                         </div>
                                         <div class="field-container">
                                             <label for="securitycode">Security Code</label>
-                                            <input id="securitycode" name="securitycode" type="text" pattern="[0-9]" inputmode="numeric">
+                                            <input id="securitycode" name="securitycode" type="text" inputmode="numeric"
+                                                required>
+                                            <div class="invalid-feedback">
+                                                Valid security code is required.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -422,17 +439,34 @@
                 </div>
             </footer>
         </div>
+
+
+
 </body>
+<div id="msj-alert" role="alert" aria-live="assertive" aria-atomic="true" class="toast position-fixed mt-3 ml-3" style="z-index: 50000;top: 0; right: 2em;" data-autohide="true" data-delay="5000"> 
+    <div class="toast-header">
+        <!-- <img src="..." class="rounded mr-2" alt="..."> -->
+        <strong class="mr-auto">Alert!!</strong>
+        <small>11 mins ago</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Hello, world! This is a toast message.
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+    crossorigin="anonymous"></script>
 
 <script src="source/js/menu.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-
 <script src="source/js/cart.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>

@@ -72,7 +72,7 @@ $("#Shopping-Cart").on("change", ".cantidad", function () {
 /***
  * Funcion para Formulario devuelve un array de los datos insertados en el
  * @form typo de dato jquery selector
- * @returns
+ * @returns array
  */
 
 function FormSerialicearray(form) {
@@ -84,10 +84,42 @@ function FormSerialicearray(form) {
 */
 
 $("#Billing-data-form").on("submit", function (e) {
-  e.preventDefault(); // evitamos que el evento se propague 
-  e.stopPropagation();// detenmos que el form se envie y recargue la pagina
+  e.preventDefault(); // evitamos que el evento se propague
+  e.stopPropagation(); // detenmos que el form se envie y recargue la pagina
+  let form = $(this),
+    required_fields_filled = true;
 
-  console.log(FormSerialicearray($(this))); // devolvemos en un array los datos insertados en el formulario
+  form.find("input, textarea, select ,radio").each(function () {
+    let input = document.getElementById($(this).attr("id"));
+    if ($(this).prop("required") && $(this).val() == "") {
+      $(this).focus();
+      required_fields_filled = false;
+    }
+    if (!input.validity.valid) {
+      required_fields_filled = false;
+    }
+  });
+
+  if (required_fields_filled) {
+    $(".toast").toast("show", {
+      animation: true,
+      autohide: true,
+    });
+    $(".toast").find(".toast-header").removeClass("bg-danger text-white");
+    $(".toast").find(".toast-header").addClass("bg-info text-white");
+
+    $(".toast").find(".toast-body").html("Gracias por tu Compra");
+    console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
+  } else {
+    $(".toast").toast("show", {
+      animation: true,
+      autohide: true,
+    });
+    $(".toast").find(".toast-header").removeClass("bg-info text-white");
+    $(".toast").find(".toast-header").addClass("bg-danger text-white");
+    $(".toast").find(".toast-body").html("Verifica los campos obligatorios");
+    form.addClass("was-validated");
+  }
 });
 
 myCart();
