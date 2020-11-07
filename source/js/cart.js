@@ -41,6 +41,8 @@ function myCart() {
     storedProducts.forEach((element) => {
       $("#list-products-final").append(template(element));
     });
+  }else{
+    $("#list-products-final").html("")
   }
 }
 
@@ -66,8 +68,23 @@ function calculateTotal() {
     $(".total-pay").html(totalPago);
     $(".total-pay").val(totalPago);
     $("#total-product").html(storedProducts.length);
+  }else{
+    $("#list-products-final").html("");
+    $(".total-pay").html(0);
+    $(".total-pay").val(0);
+    $("#total-product").html(0);
   }
 }
+
+/***
+ * Evento para tabs de factura
+ */
+$('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+  e.target // newly activated tab
+  e.relatedTarget // previous active tab
+  console.log($(e.target).attr("href")); 
+  
+})
 
 $("#Shopping-Cart").on("change", ".cantidad", function () {
   let cantidad = $(this).val();
@@ -124,6 +141,10 @@ $("#Billing-data-form").on("submit", function (e) {
 
     savePurchaseInfo(form);
     CustomAlert($(".toast"), "Gracias por tu Compra", "success");
+    $(this)[0].reset()
+    localStorage.setItem("my_products","")    
+    myCart();
+    calculateTotal();
     //console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
   } else {
     $(".toast").toast("show", {
