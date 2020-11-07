@@ -277,4 +277,3 @@ const CustomAlert = (elementHtml, mensaje, alertType) => {
     .addClass(`${alertType == "success" ? type.class[0] : type.class[1]}`);
   $(elementHtml).find(".toast-body").html(mensaje);
 };
-
