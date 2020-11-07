@@ -5,6 +5,9 @@
 const objGoogleUser = localStorage.getItem("objGoogleUser");
 const storedGoogleUser = objGoogleUser ? JSON.parse(objGoogleUser) : {};
 
+const isLogged = localStorage.getItem("isLogged");
+const storedIsLogged = isLogged ? JSON.parse(isLogged) : {};
+
 const objCartStored = localStorage.getItem("my_products");
 const storedProducts = objCartStored ? JSON.parse(objCartStored) : {};
 
@@ -80,22 +83,31 @@ function calculateTotal() {
  * Evento para tabs de factura
  */
 $('a[data-toggle="pill"]').on("shown.bs.tab", function (e) {
-  //Obtenemos el email
-  let correo = storedGoogleUser.email;
-  let html = "";
-  fs.collection("Pedidos")
-    .where("correoPedido", "==", correo)
-    .get()
-    .then((snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        const producto = doc.data();
-        console.log(producto);
-      });
-    });
-
   e.target; // newly activated tab
   e.relatedTarget; // previous active tab
-  console.log($(e.target).attr("href"));
+  let tabNavigationId = $(e.target).attr("href");
+  //Obtenemos el email
+  let correo = storedGoogleUser.email;
+  if (tabNavigationId == "#complete-order") {
+    let html = (object) => {
+      return `<tr>
+      <td class="oder-number">${object.idPedido}</td>
+      <td class="date-pay">2020</td>
+      <td>$.${object.totalPedido}</td>
+      <td class="payment-method">${object.metodoPagoPedido}</td>
+      </tr>`;
+    };
+    fs.collection("Pedidos")
+      .where("correoPedido", "==", correo)
+      .get()
+      .then((snapshot) => {
+        $("#complete-order").find("tbody").html(""); // REINICIAMOS LOS PEDIDOS
+        snapshot.docs.forEach((doc) => {
+          const producto = doc.data();
+          $("#complete-order").find("tbody").append(html(producto)); // AGREGAMOS LOS PEDIDOS
+        });
+      });
+  }
 });
 
 $("#Shopping-Cart").on("change", ".cantidad", function () {
@@ -124,13 +136,7 @@ $("#Billing-data-form").on("submit", function (e) {
   e.preventDefault(); // evitamos que el evento se propague
   e.stopPropagation(); // detenmos que el form se envie y recargue la pagina
 
-  let descripcionCompra = [];
-  if (storedProducts.length > 0) {
-    storedProducts.forEach((element) => {
-      descripcionCompra.push(element.name);
-    });
-  }
-  console.log(descripcionCompra);
+
   let form = $(this),
     required_fields_filled = true;
 
@@ -146,23 +152,24 @@ $("#Billing-data-form").on("submit", function (e) {
   });
 
   if (required_fields_filled) {
-    $(".toast").toast("show", {
-      animation: true,
-      autohide: true,
-    });
+    if (isLogged === "true") {
+      savePurchaseInfo(form);
+      CustomAlert($(".toast"), "Gracias por tu Compra", "success");
+      $(this)[0].reset();
+      localStorage.setItem("my_products", "");
+      form.removeClass("was-validated");
+      myCart();
+      calculateTotal();
+    } else {
+      CustomAlert(
+        $(".toast"),
+        "Por favor Inicia sesion para continuar con tu pedido",
+        "danger"
+      );
+    }
 
-    savePurchaseInfo(form);
-    CustomAlert($(".toast"), "Gracias por tu Compra", "success");
-    $(this)[0].reset();
-    localStorage.setItem("my_products", "");
-    myCart();
-    calculateTotal();
     //console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
   } else {
-    $(".toast").toast("show", {
-      animation: true,
-      autohide: true,
-    });
     CustomAlert($(".toast"), "Verifica los campos obligatorios", "danger");
     form.addClass("was-validated");
   }
@@ -179,6 +186,10 @@ const CustomAlert = (elementHtml, mensaje, alertType) => {
     class: ["bg-info text-white", "bg-danger text-white"],
   };
 
+  $(elementHtml).toast("show", {
+    animation: true,
+    autohide: true,
+  });
   $(elementHtml).css({ "z-index": "5000" });
   $(elementHtml)
     .find(".toast-header")
@@ -196,6 +207,13 @@ const Pedidos = "Pedidos";
 const savePurchaseInfo = (form) => {
   //Obtenemos la informacion del pedido
   let infor = [FormSerialicearray(form)];
+  let descripcionCompra = [];
+  if (storedProducts.length > 0) {
+    storedProducts.forEach((element) => {
+      descripcionCompra.push(element.name);
+    });
+  }
+
   /**
 0: {name: "firstName", value: "Armando"}
 1: {name: "lastName", value: "Santos"}
@@ -236,7 +254,7 @@ const savePurchaseInfo = (form) => {
   let fechaExpiracionTarjetaPedido = infor[0][11].value;
   let ccbTarjetaPedido = infor[0][12].value;
   let totalPedido = infor[0][13].value;
-  let descipcionPedido = "Holis";
+  let descipcionPedido = descripcionCompra;
   let idPedido = docID;
 
   //Hacemos el llamada a la DB en la posicion del DOC que creamos anteriormente

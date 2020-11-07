@@ -213,12 +213,12 @@
                                 <div class="d-block my-3">
                                     <div class="custom-control custom-radio">
                                         <input id="credit" name="paymentMethod" type="radio"
-                                            class="custom-control-input" required>
+                                            class="custom-control-input" value="Credit card" required>
                                         <label class="custom-control-label" for="credit">Credit card</label>
                                     </div>
                                     <div class="custom-control custom-radio">
                                         <input id="debit" name="paymentMethod" type="radio" class="custom-control-input"
-                                            required>
+                                            value="Debit card" required>
                                         <label class="custom-control-label" for="debit">Debit card</label>
                                     </div>
                                 </div>
@@ -408,26 +408,16 @@
                     </div>
                     <div class=" shadow p-3 mb-5 bg-white rounded">
                         <table class="table text-center">
-                            <tr>
-                                <th>ORDER NUMBER</th>
-                                <th>DATE</th>
-                                <th>AMOUNT PAID</th>
-                                <th>PAYMENT METHOD</th>
-                            </tr>
-                            <tbody>
+                            <thead>
                                 <tr>
-                                    <td class="oder-number">#CV45632</td>
-                                    <td class="date-pay"></td>
-                                    <td>$.<span class="total-pay"></span></td>
-                                    <td class="payment-method"></td>
+                                    <th>ORDER NUMBER</th>
+                                    <th>DATE</th>
+                                    <th>AMOUNT PAID</th>
+                                    <th>PAYMENT METHOD</th>
                                 </tr>
+                            </thead>
 
-                                <tr>
-                                    <td class="oder-number">#CV45632</td>
-                                    <td class="date-pay"></td>
-                                    <td>$.<span class="total-pay"></span></td>
-                                    <td class="payment-method"></td>
-                                </tr>
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
