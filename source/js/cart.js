@@ -50,7 +50,7 @@ function calculateTotal() {
   });
   templateTotal = `<tr>
     <th colspan="4" scope="col" class="text-right">TOTAL :</th>
-    <th scope="col" class="text-center">Q.${totalPago}</th>
+    <th scope="col" class="text-center">$.${totalPago}</th>
   <tr>`;
   $("#list-products-final").append(templateTotal);
   $(".total-pay").html(totalPago);
