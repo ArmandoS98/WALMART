@@ -95,13 +95,13 @@ $("#Billing-data-form").on("submit", function (e) {
   e.preventDefault(); // evitamos que el evento se propague
   e.stopPropagation(); // detenmos que el form se envie y recargue la pagina
 
-  let descripcionCompra = []
-    if (storedProducts.length > 0) {
-      storedProducts.forEach((element) => {
-        descripcionCompra.push(element.name);
-      });
-    }
-    console.log(descripcionCompra);
+  let descripcionCompra = [];
+  if (storedProducts.length > 0) {
+    storedProducts.forEach((element) => {
+      descripcionCompra.push(element.name);
+    });
+  }
+  console.log(descripcionCompra);
   let form = $(this),
     required_fields_filled = true;
 
@@ -158,27 +158,14 @@ const CustomAlert = (elementHtml, mensaje, alertType) => {
 myCart();
 calculateTotal();
 
-
-
-
-const saveTaskByGoogle = (name, email, photoUrl, uid, rol) => {
-  const docID = fs.collection(user_coleccion).doc(uid);
-  docID
-    .get()
-    .then(function (doc) {
-      if (doc.exists) {
-        console.log("Usuario ya ingresado:", doc.data());
-      } else {
-        fs.collection(user_coleccion).doc(uid).set({
-          email,
-          uid,
-          name,
-          rol,
-          photoUrl,
-        });
-      }
-    })
-    .catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+const Pedidos = "Pedidos";
+const savePurchaseInfo = () => {
+  const docID = fs.collection(Pedidos).doc().id;
+  fs.collection(Pedidos).doc(docID).set({
+    email,
+    uid,
+    name,
+    rol,
+    photoUrl,
+  });
 };
