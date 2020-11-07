@@ -105,22 +105,39 @@ $("#Billing-data-form").on("submit", function (e) {
       animation: true,
       autohide: true,
     });
-    $(".toast").find(".toast-header").removeClass("bg-danger text-white");
-    $(".toast").find(".toast-header").addClass("bg-info text-white");
 
-    $(".toast").find(".toast-body").html("Gracias por tu Compra");
+    CustomAlert($(".toast"), "Gracias por tu Compra", "success");
     console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
   } else {
     $(".toast").toast("show", {
       animation: true,
       autohide: true,
     });
-    $(".toast").find(".toast-header").removeClass("bg-info text-white");
-    $(".toast").find(".toast-header").addClass("bg-danger text-white");
-    $(".toast").find(".toast-body").html("Verifica los campos obligatorios");
+    CustomAlert($(".toast"), "Verifica los campos obligatorios", "danger");
     form.addClass("was-validated");
   }
 });
+
+/**
+ * alert custom
+ * @param {type jquery elelement} elementHtml
+ * @param {type string } mensaje
+ * @param {type string } alertType
+ */
+const CustomAlert = (elementHtml, mensaje, alertType) => {
+  let type = {
+    class: ["bg-info text-white", "bg-danger text-white"],
+  };
+
+  $(elementHtml).css({ "z-index": "5000" });
+  $(elementHtml)
+    .find(".toast-header")
+    .removeClass(`${alertType == "success" ? type.class[1] : type.class[1]}`);
+  $(elementHtml)
+    .find(".toast-header")
+    .addClass(`${alertType == "success" ? type.class[0] : type.class[1]}`);
+  $(elementHtml).find(".toast-body").html(mensaje);
+};
 
 myCart();
 calculateTotal();
