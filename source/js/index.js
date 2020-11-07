@@ -74,6 +74,8 @@ function dataUser(user) {
 
 //GoogleLgin
 const googleButton = document.querySelector("#googleLogin");
+const objGoogleUser = localStorage.getItem("objGoogleUser");
+const storedGoogleUser = objGoogleUser ? JSON.parse(objCartStored) : {};
 googleButton.addEventListener("click", (e) => {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth
@@ -88,8 +90,8 @@ googleButton.addEventListener("click", (e) => {
       photoUrl = user.photoURL;
       uid = user.uid;
       dataUser(user);
+      localStorage.setItem("objGoogleUser", JSON.stringify(user));
       await saveTaskByGoogle(name, email, photoUrl, uid, 1);
-
       signupForm.reset();
       $("#signinModal").modal("hide");
     })
