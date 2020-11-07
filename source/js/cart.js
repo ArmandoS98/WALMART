@@ -122,8 +122,9 @@ $("#Billing-data-form").on("submit", function (e) {
       autohide: true,
     });
 
+    savePurchaseInfo(form);
     CustomAlert($(".toast"), "Gracias por tu Compra", "success");
-    console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
+    //console.log(FormSerialicearray(form)); // devolvemos en un array los datos insertados en el formulario
   } else {
     $(".toast").toast("show", {
       animation: true,
@@ -159,13 +160,36 @@ myCart();
 calculateTotal();
 
 const Pedidos = "Pedidos";
-const savePurchaseInfo = () => {
-  const docID = fs.collection(Pedidos).doc().id;
-  fs.collection(Pedidos).doc(docID).set({
-    email,
-    uid,
-    name,
-    rol,
-    photoUrl,
-  });
+const savePurchaseInfo = (form) => {
+  //Obtenemos la informacion del pedido
+  let infor = [FormSerialicearray(form)];
+  console.log(infor);
+
+
+/**
+0: {name: "firstName", value: "Armando"}
+1: {name: "lastName", value: "Santos"}
+2: {name: "email", value: "armandosantosec@gmail.com"}
+3: {name: "address", value: "Guatemala, Guatemala"}
+4: {name: "address2", value: "632132"}
+5: {name: "country", value: "Guatemala"}
+6: {name: "state", value: "Guatemala"}
+7: {name: "zip", value: "+502"}
+8: {name: "paymentMethod", value: "on"}
+9: {name: "name-card", value: "Armando Santos"}
+10: {name: "cardnumber", value: "3566 0020 2036 0505"}
+11: {name: "expirationdate", value: "12/12"}
+12: {name: "securitycode", value: "3212"}
+13: {name: "total", value: "510"}
+ */
+
+
+  //Obtenemos el ID del docuemntos a donde se va a guardar
+  //const docID = fs.collection(Pedidos).doc().id;
+  //infor.docID = docID;
+
+  //console.log(infor);
+
+  //Hacemos el llamada a la DB en la posicion del DOC que creamos anteriormente
+  //fs.collection(Pedidos).doc(docID).set(infor);
 };
