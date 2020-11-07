@@ -9,7 +9,7 @@ function template(product) {
               <td><img src="${
                 product.image
               }" class="card-img-top img-fluid img-thumbnail" alt="..." style="width:6rem"></td>
-              <td>${product.descripcion}</td>
+              <td>${product.name}</td>
               <td>${product.precio}</td>
               <td><input type="number" class="cantidad form-control text-center" min="0" value="${
                 product.cantidad

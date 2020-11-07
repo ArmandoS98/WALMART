@@ -75,7 +75,7 @@ function dataUser(user) {
 //GoogleLgin
 const googleButton = document.querySelector("#googleLogin");
 const objGoogleUser = localStorage.getItem("objGoogleUser");
-const storedGoogleUser = objGoogleUser ? JSON.parse(objCartStored) : {};
+const storedGoogleUser = objGoogleUser ? JSON.parse(objGoogleUser) : {};
 googleButton.addEventListener("click", (e) => {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth
@@ -91,11 +91,13 @@ googleButton.addEventListener("click", (e) => {
       uid = user.uid;
       dataUser(user);
       localStorage.setItem("objGoogleUser", JSON.stringify(user));
+      localStorage.setItem("isLogged", true);
       await saveTaskByGoogle(name, email, photoUrl, uid, 1);
       signupForm.reset();
       $("#signinModal").modal("hide");
     })
     .catch((err) => {
+      localStorage.setItem("isLogged", false);
       console.log(err);
     });
 });
@@ -133,8 +135,10 @@ const setupProductos = (data) => {
 // validacion del logeo del usuario
 auth.onAuthStateChanged((user) => {
   if (user) {
+    localStorage.setItem("isLogged", true);
     dataUser(user);
   } else {
+    localStorage.setItem("isLogged", false);
     dataUser(user);
     loginCheck(user);
   }
@@ -216,8 +220,7 @@ function addToCart(productsData) {
       (product) => product.docid === productsData.docid
     );
     if (existProduct !== -1) {
-      alert("El producto ya esta añadido al carrito!!");
-      console.log();
+      CustomAlert($('.toast'),"El producto ya esta añadido, puedes agregar mas en tu carrito!","danger")
     } else {
       products.push(productsData);
       localStorage.setItem("my_products", JSON.stringify(products));
@@ -246,3 +249,29 @@ $(".productos").on("click", ".add-card", function () {
   let data = $(this).data();
   addToCart(data);
 });
+
+
+
+/**
+ * alert custom
+ * @param {type jquery elelement} elementHtml
+ * @param {type string } mensaje
+ * @param {type string } alertType
+ */
+const CustomAlert = (elementHtml, mensaje, alertType) => {
+  let type = {
+    class: ["bg-info text-white", "bg-danger text-white"],
+  };
+  elementHtml.toast("show", {
+    animation: true,
+    autohide: true,
+  });
+  $(elementHtml).css({ "z-index": "5000" });
+  $(elementHtml)
+    .find(".toast-header")
+    .removeClass(`${alertType == "success" ? type.class[1] : type.class[1]}`);
+  $(elementHtml)
+    .find(".toast-header")
+    .addClass(`${alertType == "success" ? type.class[0] : type.class[1]}`);
+  $(elementHtml).find(".toast-body").html(mensaje);
+};
